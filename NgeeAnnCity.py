@@ -139,7 +139,7 @@ def place_building(game_data, buildplace,field, health):
     
     vert_pos = t.index(buildplace[0].capitalize()) 
     
-    field[int(vert_pos)][int(buildplace[1])-1] = buildings[game_data["building"]]["shortform"]
+    field[int(vert_pos)][int(buildplace[1:])-1] = buildings[game_data["building"]]["shortform"]
 
     
 
@@ -179,21 +179,21 @@ def show_main_menu():
         if option == '1':
             draw_field()
             choose_building(game_data)
-            break
+            
 
         elif option == '2':
             # Replace 'file_path' with the actual path from where you want to lo1ad the text file
             text_file_path = 'saved_map.txt'
             load_from_textfile(text_file_path)
             print("Map loaded from text file successfully!")
-            draw_field()
-            break
+            
+            
     
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
             text_file_path = 'saved_map.txt'
             save_to_textfile(field, health, text_file_path)
-            break
+            
     
         else:
             print("Invalid option. Please enter a valid choice.")
