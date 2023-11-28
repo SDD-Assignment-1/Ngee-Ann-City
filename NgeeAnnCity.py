@@ -4,12 +4,57 @@ import random
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
  
 # Initialize game data
-game_data = {}
+game_data = {
+            "coins":0,
+            "points":0,
+             "turn": 0,
+             "building": '',}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
  
-field = [['' for _ in range(20)] for _ in range(20)]
-health = [['' for _ in range(20)] for _ in range(20)]
+field = [['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],  #To print out all the units' name
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ]
+    
+         
+         ]
+health = [['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],  #To print out all the units' name
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
+    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ]]
  
 def save_game(field, health, file_path):
     game_data['field'] = field
@@ -69,10 +114,63 @@ def draw_field():
             print("+-----", end="")
         print("+")
 
-def choose_building():
+def buy_building(game_data, choice):
+    game_data['coin']-=1
+    game_data['turn']+=1
+    game_data['building'] = choice
+def place_building(game_data, buildplace,field, health):
+    int(vert_pos) 
+    vert_pos = t.index(buildplace[0])
+
+#randomise building choices
+def choose_building(game_data):
+
+    
     choice1 = building_list[random.randint(0,4)]
     choice2 = building_list[random.randint(0,4)]
-    print("Please select a building to place. Your choices are:\n 1. {} \n 2. {}".format (choice1, choice2))
+    # ensure the choices dont repeat.
+    while choice2 == choice1:
+        choice2 = building_list[random.randint(0,4)]
+    print("Turn: {}".format(game_data['turn']))
+    buildoption = input("Please select a building to place. Your choices are:\n 1. {} \n 2. {}\n".format (choice1, choice2))
+    if buildoption == 1:
+        buy_building(game_data, choice1)
+    elif buildoption == 2:
+        buy_building(game_data, choice2)
+    buildplace = input("PLease select where to place building.")
+
+        
+
+def show_main_menu():
+    print("Please select an option \n\
+    1. Start New Game\n\
+    2. Load Saved Game\n\
+    3. Display High Scores\n\
+    4. Save and exit Game")
+    option = input("Enter your choice: ")
+    while True:
+        if option == '1':
+            draw_field()
+            choose_building(game_data)
+            break
+
+        elif option == '2':
+            # Replace 'file_path' with the actual path from where you want to lo1ad the text file
+            text_file_path = 'saved_map.txt'
+            load_from_textfile(text_file_path)
+            print("Map loaded from text file successfully!")
+            draw_field()
+            break
+    
+        elif option == '4':
+            # Replace 'file_path' with the actual path where you want to save the text file
+            text_file_path = 'saved_map.txt'
+            save_to_textfile(field, health, text_file_path)
+            break
+    
+        else:
+            print("Invalid option. Please enter a valid choice.")
+
  
 print("----------------")
 print("| Ngee Ann City |")
@@ -80,30 +178,10 @@ print("----------------")
 print("Build a prosperous city!")
 print()
  
+# main game
+i=0
 while True:
-    print("Please select an option \n\
-    1. Start New Game\n\
-    2. Load Saved Game\n\
-    3. Display High Scores\n\
-    4. Save and exit Game")
-    option = input("Enter your choice: ")
- 
-    if option == '1':
-        draw_field()
-        choose_building()
-
-    elif option == '2':
-        # Replace 'file_path' with the actual path from where you want to lo1ad the text file
-        text_file_path = 'saved_map.txt'
-        load_from_textfile(text_file_path)
-        print("Map loaded from text file successfully!")
-        draw_field()
- 
-    elif option == '4':
-        # Replace 'file_path' with the actual path where you want to save the text file
-        text_file_path = 'saved_map.txt'
-        save_to_textfile(field, health, text_file_path)
-        break
- 
-    else:
-        print("Invalid option. Please enter a valid choice.")
+    if i == 0:
+        show_main_menu()
+        i +=1
+    
