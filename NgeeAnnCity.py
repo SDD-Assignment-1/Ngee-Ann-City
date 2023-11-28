@@ -22,9 +22,9 @@ buildings =  {'Residential' : {
  
 # Initialize game data
 game_data = {
-            "coins":0,
+            "coins":16,
             "points":0,
-             "turn": 0,
+             "turn": 1,
              "building": ''}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
@@ -110,7 +110,7 @@ def load_from_textfile(file_path):
  
  
 def draw_field():
-    print("   1     2     3     4     5     6      7     8     9    10     11    12    13    14    15    16    17    18    19    20")
+    print("   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20")
     num_row = len(field)
     num_column = len(field[0])
     print(" ", end="")
@@ -153,14 +153,13 @@ def choose_building(game_data):
     buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n Your choices are: ".format (choice1, choice2))
     if buildoption == '1':
         buy_building(game_data, choice1)
-        buildplace = input("PLease select where to place building: ")
+        buildplace = input("Please select where to place building: ")
         place_building(game_data, buildplace, field, health)
         
     elif buildoption == '2':
         buy_building(game_data, choice2)
-        buildplace = input("PLease select where to place building: ")
+        buildplace = input("Please select where to place building: ")
         place_building(game_data, buildplace, field, health)
-        draw_field()
     
 
         
