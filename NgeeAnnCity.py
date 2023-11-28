@@ -1,4 +1,5 @@
 import pickle
+import random
 
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
@@ -88,7 +89,10 @@ while True:
 
     if option == '1':
         draw_field()
-
+        
+        choice1 = building_list[random.randint(0,4)] 
+        choice2 = building_list[random.randint(0,4)]
+        print("Please select building. Your choices are {0} and {1}", choice1,choice2)
     elif option == '2':
         # Replace 'file_path' with the actual path from where you want to load the text file
         text_file_path = 'saved_map.txt'
