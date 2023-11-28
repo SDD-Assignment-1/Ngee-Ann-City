@@ -2,13 +2,30 @@ import pickle
 import random
  
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
+
+buildings =  {'Residential' : {
+            'shortform': 'R'
+            },
+            'Commercial' : {
+            'shortform': 'C'
+            },
+            'Industry' : {
+            'shortform': 'I'
+            },
+            'Park' : {
+            'shortform': 'O'
+            },
+            'Road' : {
+            'shortform': '*'
+            }
+            }
  
 # Initialize game data
 game_data = {
             "coins":0,
             "points":0,
              "turn": 0,
-             "building": '',}
+             "building": ''}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
  
@@ -115,12 +132,16 @@ def draw_field():
         print("+")
 
 def buy_building(game_data, choice):
-    game_data['coin']-=1
-    game_data['turn']+=1
-    game_data['building'] = choice
+    game_data["coins"]-=1
+    game_data["turn"]+=1
+    game_data["building"] = choice
 def place_building(game_data, buildplace,field, health):
-    int(vert_pos) 
-    vert_pos = t.index(buildplace[0])
+    
+    vert_pos = t.index(buildplace[0].capitalize()) 
+    
+    field[int(vert_pos)][int(buildplace[1])-1] = buildings[game_data["building"]]["shortform"]
+
+    
 
 #randomise building choices
 def choose_building(game_data):
@@ -133,11 +154,17 @@ def choose_building(game_data):
         choice2 = building_list[random.randint(0,4)]
     print("Turn: {}".format(game_data['turn']))
     buildoption = input("Please select a building to place. Your choices are:\n 1. {} \n 2. {}\n".format (choice1, choice2))
-    if buildoption == 1:
+    if buildoption == '1':
         buy_building(game_data, choice1)
-    elif buildoption == 2:
+        buildplace = input("PLease select where to place building.")
+        place_building(game_data, buildplace, field, health)
+        
+    elif buildoption == '2':
         buy_building(game_data, choice2)
-    buildplace = input("PLease select where to place building.")
+        buildplace = input("PLease select where to place building.")
+        place_building(game_data, buildplace, field, health)
+        draw_field()
+    
 
         
 
