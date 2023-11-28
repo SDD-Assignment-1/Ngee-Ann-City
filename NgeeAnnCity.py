@@ -115,20 +115,17 @@ def draw_field():
     num_column = len(field[0])
     print(" ", end="")
     for i in range(num_column):
-        print("+-----", end="")
+        print("+---", end="")
     print('+')
     for row in range(num_row):
         print(t[row], end="")
         for column in field[row]:
-            print("|{:5}".format(column), end="")
+            print("|{:3}".format(column), end="")
         print("|")
         print(" ", end='')
-        for column1 in health[row]:
-            print("|{:5}".format(column1), end="")
-        print("|")
-        print(" ", end='')
+        
         for i in range(num_column):
-            print("+-----", end="")
+            print("+---", end="")
         print("+")
 
 def buy_building(game_data, choice):
@@ -139,7 +136,7 @@ def place_building(game_data, buildplace,field, health):
     
     vert_pos = t.index(buildplace[0].capitalize()) 
     
-    field[int(vert_pos)][int(buildplace[1:])-1] = buildings[game_data["building"]]["shortform"]
+    field[int(vert_pos)][int(buildplace[1:])-1] = " " + buildings[game_data["building"]]["shortform"]
 
     
 
