@@ -129,14 +129,19 @@ def draw_field():
         print("+")
 
 def buy_building(game_data, choice):
-    game_data["coins"]-=1
-    game_data["turn"]+=1
+
     game_data["building"] = choice
 def place_building(game_data, buildplace,field, health):
     
-    vert_pos = t.index(buildplace[0].capitalize()) 
-    
-    field[int(vert_pos)][int(buildplace[1:])-1] = " " + buildings[game_data["building"]]["shortform"]
+    vert_pos = t.index(buildplace[0].capitalize())
+
+    if field[int(vert_pos)][int(buildplace[1:])-1] == '':
+        field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
+        game_data["coins"] -= 1
+        game_data["turn"] += 1
+    else:
+        print("Another unit is in position")
+
 
     
 
@@ -149,7 +154,9 @@ def choose_building(game_data):
     # ensure the choices dont repeat.
     while choice2 == choice1:
         choice2 = building_list[random.randint(0,4)]
-    print("Turn: {}".format(game_data['turn']))
+    print()
+    print("Turn: {}          Coins: {}".format(game_data['turn'],game_data['coins']))
+    print("Name:            Points: {}".format(game_data['points']))
     buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choice1, choice2))
     if buildoption == '1':
         buy_building(game_data, choice1)
