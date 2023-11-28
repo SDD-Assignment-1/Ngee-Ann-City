@@ -150,21 +150,35 @@ def choose_building(game_data):
     while choice2 == choice1:
         choice2 = building_list[random.randint(0,4)]
     print("Turn: {}".format(game_data['turn']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n Your choices are: ".format (choice1, choice2))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choice1, choice2))
     if buildoption == '1':
         buy_building(game_data, choice1)
         buildplace = input("Please select where to place building: ")
         place_building(game_data, buildplace, field, health)
-        
+
     elif buildoption == '2':
         buy_building(game_data, choice2)
         buildplace = input("Please select where to place building: ")
         place_building(game_data, buildplace, field, health)
+
+    elif buildoption == '3':
+        print("Thank you for playing Ngee Ann City. Goodbye !")
+        show_main_menu()
+
+    else:
+        print("Invalid option. Please enter a valid choice.")
     
 
         
 
 def show_main_menu():
+    print()
+    print("----------------")
+    print("| Ngee Ann City |")
+    print("----------------")
+    print("Build a prosperous city!")
+    print()
+
     print("Please select an option \n\
     1. Start New Game\n\
     2. Load Saved Game\n\
@@ -195,11 +209,7 @@ def show_main_menu():
             print("Invalid option. Please enter a valid choice.")
 
  
-print("----------------")
-print("| Ngee Ann City |")
-print("----------------")
-print("Build a prosperous city!")
-print()
+
  
 # main game
 i=0
