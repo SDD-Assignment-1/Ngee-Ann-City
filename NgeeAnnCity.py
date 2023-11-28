@@ -3,7 +3,11 @@ import pickle
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
 # Initialize game data
-game_data = {}
+game_data = {
+    'turn':0,
+    'coins':16,
+    'points': 0,
+}
 
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
 
