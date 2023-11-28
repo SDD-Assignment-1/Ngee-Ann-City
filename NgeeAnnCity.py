@@ -68,6 +68,11 @@ def draw_field():
         for i in range(num_column):
             print("+-----", end="")
         print("+")
+
+def choose_building():
+    choice1 = building_list[random.randint(0,4)]
+    choice2 = building_list[random.randint(0,4)]
+    print("Please select a building to place. Your choices are:\n 1. {} \n 2. {}".format (choice1, choice2))
  
 print("----------------")
 print("| Ngee Ann City |")
@@ -85,9 +90,10 @@ while True:
  
     if option == '1':
         draw_field()
+        choose_building()
 
     elif option == '2':
-        # Replace 'file_path' with the actual path from where you want to load the text file
+        # Replace 'file_path' with the actual path from where you want to lo1ad the text file
         text_file_path = 'saved_map.txt'
         load_from_textfile(text_file_path)
         print("Map loaded from text file successfully!")
