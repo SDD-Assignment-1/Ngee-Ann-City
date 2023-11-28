@@ -153,15 +153,15 @@ def choose_building(game_data):
     while choice2 == choice1:
         choice2 = building_list[random.randint(0,4)]
     print("Turn: {}".format(game_data['turn']))
-    buildoption = input("Please select a building to place. Your choices are:\n 1. {} \n 2. {}\n".format (choice1, choice2))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n Your choices are: ".format (choice1, choice2))
     if buildoption == '1':
         buy_building(game_data, choice1)
-        buildplace = input("PLease select where to place building.")
+        buildplace = input("PLease select where to place building: ")
         place_building(game_data, buildplace, field, health)
         
     elif buildoption == '2':
         buy_building(game_data, choice2)
-        buildplace = input("PLease select where to place building.")
+        buildplace = input("PLease select where to place building: ")
         place_building(game_data, buildplace, field, health)
         draw_field()
     
