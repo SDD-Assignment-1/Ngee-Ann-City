@@ -103,10 +103,6 @@ while True:
         print("Map saved to text file successfully!")
         break
 
-    elif option == '0':
-        print("Exiting the program.")
-        break
-
     else:
         print("Invalid option. Please enter a valid choice.")
 
