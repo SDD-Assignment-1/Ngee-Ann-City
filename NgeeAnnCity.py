@@ -174,9 +174,18 @@ def choose_building(game_data):
 
     else:
         print("Invalid option. Please enter a valid choice.")
-    
 
+
+#Save high scores
+def save_high_scores(self, filename="high_scores.json"):
+    # Save high scores to a JSON file
+    scores = [{"player_name": player.name, "score": self.calculate_score(player)} for player in self.players]
+    scores.sort(key=lambda x: x["score"], reverse=True)
         
+    with open(filename, "w") as file:
+        json.dump(scores[:10], file)
+    
+       
 
 def show_main_menu():
     print()
@@ -204,7 +213,10 @@ def show_main_menu():
             load_from_textfile(text_file_path)
             print("Map loaded from text file successfully!")
             
-            
+        elif option == '3':
+            # Replace 'file_path' with the actual path where you want to save the text file
+            text_file_path = 'saved_map.txt'
+            save_to_textfile(field, health, text_file_path)            
     
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
