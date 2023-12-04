@@ -1,5 +1,6 @@
 import pickle
 import random
+import json
  
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
@@ -180,12 +181,20 @@ def choose_building(game_data):
 def save_high_scores(self, filename="high_scores.json"):
     # Save high scores to a JSON file
     scores = [{"player_name": player.name, "score": self.calculate_score(player)} for player in self.players]
-    scores.sort(key=lambda x: x["score"], reverse=True)
+    scores.sort(key=lambda x: x["score"], reverse=True) # Displays in descending order of score
         
     with open(filename, "w") as file:
         json.dump(scores[:10], file)
     
-       
+
+def display_high_scores(self):
+    # Displays top 10 highest scores
+    scores = self.load_high_scores()    # Load saved scores from JSON file
+
+    print("Top 10 High Scores:")
+    for rank, score_entry in enumerate(scores, start=1):
+        print(f"Rank {rank}: {score_entry['player_name']} - Score: {score_entry['score']}")
+
 
 def show_main_menu():
     print()
@@ -214,13 +223,13 @@ def show_main_menu():
             print("Map loaded from text file successfully!")
             
         elif option == '3':
-            # Replace 'file_path' with the actual path where you want to save the text file
-            text_file_path = 'saved_map.txt'
-            save_to_textfile(field, health, text_file_path)            
+            display_high_scores
+                    
     
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
             text_file_path = 'saved_map.txt'
+            save_high_scores
             save_to_textfile(field, health, text_file_path)
             
     
