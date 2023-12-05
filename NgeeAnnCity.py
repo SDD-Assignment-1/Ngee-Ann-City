@@ -225,13 +225,12 @@ def show_main_menu():
             print("Map loaded from text file successfully!")
             
         elif option == '3':
-            display_high_scores
+            display_high_scores(filename="high_scores.txt")
                     
     
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
-            text_file_path = 'saved_map.txt'
-            save_high_scores
+            save_high_scores(filename="high_scores.txt")
             save_to_textfile(field, health, text_file_path)
             
     
