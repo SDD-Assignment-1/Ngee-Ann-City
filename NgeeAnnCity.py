@@ -177,23 +177,25 @@ def choose_building(game_data):
         print("Invalid option. Please enter a valid choice.")
 
 
-#Save high scores
-def save_high_scores(self, filename="high_scores.json"):
-    # Save high scores to a JSON file
-    scores = [{"player_name": player.name, "score": self.calculate_score(player)} for player in self.players]
-    scores.sort(key=lambda x: x["score"], reverse=True) # Displays in descending order of score
-        
+# Save high scores
+def save_high_scores(self, filename="high_scores.txt"):
+    # Save high scores to a text file
+    scores = game_data['points']
+    scores.sort(key=lambda x: x[1], reverse=True)
+
     with open(filename, "w") as file:
-        json.dump(scores[:10], file)
+        file.write("Top 10 High Scores:\n")
+        for rank, (player_name, game_data['points']) in enumerate(scores[:10], start=1):
+            file.write(f"Rank {rank}: {player_name} - Points: {game_data['points']}\n")    # e.g. Rank 1: Shawn - Points: 15
     
 
-def display_high_scores(self):
-    # Displays top 10 highest scores
-    scores = self.load_high_scores()    # Load saved scores from JSON file
-
-    print("Top 10 High Scores:")
-    for rank, score_entry in enumerate(scores, start=1):
-        print(f"Rank {rank}: {score_entry['player_name']} - Score: {score_entry['score']}")
+def display_high_scores(self, filename="high_scores.txt"):
+    # Display the top 10 high scores from a text file
+    try:
+        with open(filename, "r") as file:
+            print(file.read())
+    except FileNotFoundError:
+        print("Unable to load file.")
 
 
 def show_main_menu():
