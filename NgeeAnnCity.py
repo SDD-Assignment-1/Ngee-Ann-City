@@ -178,7 +178,7 @@ def choose_building(game_data):
 
 
 # Save high scores
-def save_high_scores(self, filename="high_scores.txt"):
+def save_high_scores(filename="high_scores.txt"):
     # Save high scores to a text file
     scores = game_data['points']
     scores.sort(key=lambda x: x[1], reverse=True)
@@ -189,7 +189,7 @@ def save_high_scores(self, filename="high_scores.txt"):
             file.write(f"Rank {rank}: {player_name} - Points: {game_data['points']}\n")    # e.g. Rank 1: Shawn - Points: 15
     
 
-def display_high_scores(self, filename="high_scores.txt"):
+def display_high_scores(filename="high_scores.txt"):
     # Display the top 10 high scores from a text file
     try:
         with open(filename, "r") as file:
