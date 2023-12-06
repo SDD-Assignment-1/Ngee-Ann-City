@@ -1,6 +1,5 @@
 import pickle
 import random
-import json
  
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
@@ -26,6 +25,7 @@ game_data = {
             "coins":16,
             "points":0,
              "turn": 1,
+            "name": '',
              "building": ''}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
@@ -177,7 +177,7 @@ def choose_building(game_data):
         print("Invalid option. Please enter a valid choice.")
 
 
-# Save high scores
+#Save high scores
 def save_high_scores():
     # Save high scores to a text file
     savefile = open("high_scores.txt", "w")
@@ -186,8 +186,18 @@ def save_high_scores():
 
     with open(savefile, "w") as file:
         file.write("Top 10 High Scores:\n")
-        for rank, (player_name, game_data['points']) in enumerate(scores[:10], start=1):
+        for rank, (game_data['name'], game_data['points']) in enumerate(scores[:10], start=1):
             file.write(f"Rank {rank}: {player_name} - Points: {game_data['points']}\n")    # e.g. Rank 1: Shawn - Points: 15
+    
+
+def display_high_scores():
+    # Display the top 10 high scores from high_scores.txt
+    savefile = open("high_scores.txt", "w")
+    try:
+        with open(savefile, "r") as file:
+            print(savefile.read())
+    except FileNotFoundError:
+        print("Unable to load file.")
     
 
 def display_high_scores():
