@@ -178,22 +178,23 @@ def choose_building(game_data):
 
 
 # Save high scores
-def save_high_scores(filename="high_scores.txt"):
+def save_high_scores():
     # Save high scores to a text file
+    savefile = open("high_scores.txt", "w")
     scores = game_data['points']
     scores.sort(key=lambda x: x[1], reverse=True)
 
-    with open(filename, "w") as file:
+    with open(savefile, "w") as file:
         file.write("Top 10 High Scores:\n")
         for rank, (player_name, game_data['points']) in enumerate(scores[:10], start=1):
             file.write(f"Rank {rank}: {player_name} - Points: {game_data['points']}\n")    # e.g. Rank 1: Shawn - Points: 15
     
 
-def display_high_scores(filename="high_scores.txt"):
+def display_high_scores():
     # Display the top 10 high scores from a text file
     try:
-        with open(filename, "r") as file:
-            print(file.read())
+        with open(savefile, "r") as file:
+            print(savefile.read())
     except FileNotFoundError:
         print("Unable to load file.")
 
@@ -225,12 +226,12 @@ def show_main_menu():
             print("Map loaded from text file successfully!")
             
         elif option == '3':
-            display_high_scores(filename="high_scores.txt")
+            display_high_scores()
                     
     
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
-            save_high_scores(filename="high_scores.txt")
+            save_high_scores()
             save_to_textfile(field, health, text_file_path)
             
     
