@@ -25,7 +25,8 @@ game_data = {
             "coins":16,
             "points":0,
              "turn": 1,
-             "building": ''}
+             "building": '',
+             "name":''}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
  
@@ -131,21 +132,48 @@ def draw_field():
 def buy_building(game_data, choice):
 
     game_data["building"] = choice
-def place_building(game_data, buildplace,field, health):
+def place_building(game_data, buildplace,field):
     
     vert_pos = t.index(buildplace[0].capitalize())
-
-    if field[int(vert_pos)][int(buildplace[1:])-1] == '':
-        field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
-        game_data["coins"] -= 1
-        game_data["turn"] += 1
+    if game_data['turn'] == 1:
+        if field[int(vert_pos)][int(buildplace[1:])-1] == '':
+            field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
+            game_data["coins"] -= 1
+            game_data["turn"] += 1
+            add_point(game_data)
+        else:
+            print("Another unit is in position")
     else:
-        print("Another unit is in position")
+        if field[int(vert_pos)][int(buildplace[1:])-1] == '':
+            field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
+            game_data["coins"] -= 1
+            game_data["turn"] += 1
+            add_point(game_data)
+        else:
+            print("Invalid position")
 
 
+
+def add_point(game_data):
+    if game_data["building"] == "Industry":
+        game_data["points"]+=1
+        # check how many residential buildings are adjacent 
+        
+    elif game_data["building"] == "Residential":
+        game_data["points"]+=1
+
+    elif game_data["building"] == "Commercial":
+        game_data["points"]+=1
+
+    elif game_data["building"] == "Park":
+        game_data["points"]+=1
+
+    elif game_data["building"] == "Road":
+        game_data["points"]+=1
     
+    #building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
-#randomise building choices
+# randomise building choices
 def choose_building(game_data):
 
     
@@ -161,12 +189,14 @@ def choose_building(game_data):
     if buildoption == '1':
         buy_building(game_data, choice1)
         buildplace = input("Please select where to place building: ")
-        place_building(game_data, buildplace, field, health)
+        # placing the building
+        place_building(game_data, buildplace, field)
 
     elif buildoption == '2':
         buy_building(game_data, choice2)
         buildplace = input("Please select where to place building: ")
-        place_building(game_data, buildplace, field, health)
+        # placing the building
+        place_building(game_data, buildplace, field)
 
     elif buildoption == '3':
         print("Thank you for playing Ngee Ann City. Goodbye !")
@@ -194,6 +224,8 @@ def show_main_menu():
     option = input("Enter your choice: ")
     while True:
         if option == '1':
+            name = input("Enter your name: ")
+            game_data["name"] = name
             draw_field()
             choose_building(game_data)
             
