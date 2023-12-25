@@ -25,8 +25,7 @@ game_data = {
             "coins":16,
             "points":0,
              "turn": 1,
-             "building": '',
-             "name":''}
+             "building": ''}
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
  
@@ -79,7 +78,6 @@ def save_game(field, health, file_path):
     game_data['health'] = health
     with open(file_path, 'wb') as file:
         pickle.dump(game_data, file)
- 
 def save_to_textfile(field, health, file_path):
     with open(file_path, 'w') as file:
         file.write("Field:\n")
@@ -89,25 +87,25 @@ def save_to_textfile(field, health, file_path):
         for row in health:
             file.write(' '.join(map(str, row)) + '\n')
     print("Map saved to text file successfully!")
- 
 def load_from_textfile(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
  
-        try:
-            field_start = lines.index("Field:\n") + 1
-            field_end = lines.index("\nHealth:\n")
-            health_start = field_end + 1
+    try:
+        field_start = lines.index("Field:\n") + 1
+        field_end = lines.index("\nHealth:\n")
+        health_start = field_end + 1
  
-            for row_idx in range(field_start, field_end):
-                field[row_idx - field_start] = lines[row_idx].split()
+        for row_idx in range(field_start, field_end):
+            field[row_idx - field_start] = lines[row_idx].split()
  
-            for row_idx in range(health_start, len(lines)):
-                health[row_idx - health_start] = lines[row_idx].split()
+        for row_idx in range(health_start, len(lines)):
+            health[row_idx - health_start] = lines[row_idx].split()
  
-            print("Map loaded from text file successfully!")
-        except ValueError:
-            print("")
+        print("Map loaded from text file successfully!")
+    except ValueError:
+        print("Error loading map from text file.")
+        return
  
  
 def draw_field():
@@ -199,14 +197,38 @@ def choose_building(game_data):
         place_building(game_data, buildplace, field)
 
     elif buildoption == '3':
-        print("Thank you for playing Ngee Ann City. Goodbye !")
-        show_main_menu()
-
+        # Save the game before stopping
+        text_file_path = 'saved_map.txt'
+        save_to_textfile(field, health, text_file_path)
+        print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
+        exit()  # Exit the program after saving
+ 
     else:
         print("Invalid option. Please enter a valid choice.")
+
+# save high scores
+def save_high_scores():
+    # Save high scores to a text file
+    savefile = open("high_scores.txt", "w")
+
+    player_name = game_data['name']
+    points = game_data['points']
+
+    savefile.write("Top 10 High Scores:\n")
+    savefile.write(f"Rank 1: {player_name} - Points: {points}\n")
+
+    savefile.close()
     
 
-        
+def display_high_scores():
+    # Display the top 10 high scores from high_scores.txt
+    savefile = open("high_scores.txt", "w")
+    try:
+        with open(savefile, "r") as file:
+            print(savefile.read())
+    except FileNotFoundError:
+        print("Unable to load file.")
+
 
 def show_main_menu():
     print()
@@ -228,24 +250,32 @@ def show_main_menu():
             game_data["name"] = name
             draw_field()
             choose_building(game_data)
-            
 
         elif option == '2':
-            # Replace 'file_path' with the actual path from where you want to lo1ad the text file
+            '''# Replace 'file_path' with the actual path from where you want to load the text file
             text_file_path = 'saved_map.txt'
             load_from_textfile(text_file_path)
             print("Map loaded from text file successfully!")
+            # Continue with the loaded game
+            draw_field()
+            choose_building(game_data)'''
+            print("This feature will be available in the next update.")
             
             
-    
+
+        elif option == '3':
+            display_high_scores()
+
         elif option == '4':
             # Replace 'file_path' with the actual path where you want to save the text file
             text_file_path = 'saved_map.txt'
+            save_high_scores()
             save_to_textfile(field, health, text_file_path)
-            
-    
+            break
+
         else:
             print("Invalid option. Please enter a valid choice.")
+            break
 
  
 
