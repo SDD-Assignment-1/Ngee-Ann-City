@@ -138,7 +138,7 @@ def place_building(game_data, buildplace,field):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            add_point(game_data)
+            add_point(game_data, buildplace, vert_pos)
         else:
             print("Another unit is in position")
     else:
@@ -146,16 +146,17 @@ def place_building(game_data, buildplace,field):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            add_point(game_data)
+            add_point(game_data, buildplace, vert_pos)
         else:
             print("Invalid position")
 
 
 
-def add_point(game_data):
+def add_point(game_data, buildplace, vert_pos):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
-        # check how many residential buildings are adjacent 
+        if field[int(vert_pos)][int(buildplace[1:]) - 1] == " R":
+            game_data["coins"]+=1
         
     elif game_data["building"] == "Residential":
         game_data["points"]+=1
@@ -246,8 +247,7 @@ def show_main_menu():
     option = input("Enter your choice: ")
     while True:
         if option == '1':
-            name = input("Enter your name: ")
-            game_data["name"] = name
+            
             draw_field()
             choose_building(game_data)
 
@@ -260,9 +260,7 @@ def show_main_menu():
             draw_field()
             choose_building(game_data)'''
             print("This feature will be available in the next update.")
-            
-            
-
+                        
         elif option == '3':
             display_high_scores()
 
