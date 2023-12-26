@@ -73,39 +73,20 @@ health = [['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ],
     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ]]
  
-def save_game(field, health, file_path):
-    game_data['field'] = field
-    game_data['health'] = health
-    with open(file_path, 'wb') as file:
-        pickle.dump(game_data, file)
-def save_to_textfile(field, health, file_path):
-    with open(file_path, 'w') as file:
-        file.write("Field:\n")
-        for row in field:
-            file.write(' '.join(map(str, row)) + '\n')
-        file.write("\nHealth:\n")
-        for row in health:
-            file.write(' '.join(map(str, row)) + '\n')
-    print("Map saved to text file successfully!")
-def load_from_textfile(file_path):
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
- 
-    try:
-        field_start = lines.index("Field:\n") + 1
-        field_end = lines.index("\nHealth:\n")
-        health_start = field_end + 1
- 
-        for row_idx in range(field_start, field_end):
-            field[row_idx - field_start] = lines[row_idx].split()
- 
-        for row_idx in range(health_start, len(lines)):
-            health[row_idx - health_start] = lines[row_idx].split()
- 
-        print("Map loaded from text file successfully!")
-    except ValueError:
-        print("Error loading map from text file.")
-        return
+def save_game():
+    with open('save_map.txt','wb') as save:
+        pickle.dump([field,health,game_data], save)
+    save.close()
+    print("Game saved.")
+
+
+def load_game():
+    global field, game_data, health
+    with open('save_map.txt','rb') as save:     #Load the Game Variable 
+        field, health, game_data = pickle.load(save)
+    save.close()
+
+    return
  
  
 def draw_field():
@@ -199,10 +180,11 @@ def choose_building(game_data):
 
     elif buildoption == '3':
         # Save the game before stopping
-        text_file_path = 'saved_map.txt'
-        save_to_textfile(field, health, text_file_path)
+        save_high_scores()
+        save_game()
         print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
         exit()  # Exit the program after saving
+ 
  
     else:
         print("Invalid option. Please enter a valid choice.")
@@ -229,7 +211,10 @@ def display_high_scores():
             print(savefile.read())
     except FileNotFoundError:
         print("Unable to load file.")
-
+def game_start():
+    while True:
+        draw_field()
+        choose_building(game_data)
 
 def show_main_menu():
     print()
@@ -239,49 +224,47 @@ def show_main_menu():
     print("Build a prosperous city!")
     print()
 
-    print("Please select an option \n\
+    print("Please select an option:\n\
     1. Start New Game\n\
     2. Load Saved Game\n\
     3. Display High Scores\n\
     4. Save and exit Game")
+    
     option = input("Enter your choice: ")
-    while True:
-        if option == '1':
-            
-            draw_field()
-            choose_building(game_data)
 
-        elif option == '2':
-            '''# Replace 'file_path' with the actual path from where you want to load the text file
-            text_file_path = 'saved_map.txt'
-            load_from_textfile(text_file_path)
-            print("Map loaded from text file successfully!")
-            # Continue with the loaded game
-            draw_field()
-            choose_building(game_data)'''
-            print("This feature will be available in the next update.")
-                        
-        elif option == '3':
-            display_high_scores()
+    if option == '1':
+        game_start()
 
-        elif option == '4':
-            # Replace 'file_path' with the actual path where you want to save the text file
-            text_file_path = 'saved_map.txt'
-            save_high_scores()
-            save_to_textfile(field, health, text_file_path)
-            break
+    elif option == '2':
+        try:
+            load_game()
+            print("Game loaded successfully.")
+            game_start()
+        except FileNotFoundError:
+            print("No saved game found. Starting a new game.")
+            game_start()
 
-        else:
-            print("Invalid option. Please enter a valid choice.")
-            break
+    elif option == '3':
+        display_high_scores()
 
- 
+    elif option == '4':
+        # Save high scores and the game before exiting
+        save_high_scores()
+        save_game()
+        print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
+        
 
- 
+    else:
+        print("Invalid option. Please enter a valid choice.")
+
+
+
 # main game
 i=0
 while True:
     if i == 0:
         show_main_menu()
         i +=1
+    
+
     
