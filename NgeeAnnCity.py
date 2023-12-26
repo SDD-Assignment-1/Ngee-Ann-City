@@ -130,6 +130,7 @@ def draw_field():
 def buy_building(game_data, choice):
 
     game_data["building"] = choice
+
 def place_building(game_data, buildplace,field):
     
     vert_pos = t.index(buildplace[0].capitalize())
@@ -142,20 +143,50 @@ def place_building(game_data, buildplace,field):
         else:
             print("Another unit is in position")
     else:
-        if field[int(vert_pos)][int(buildplace[1:])-1] == '':
+        adjacentTiles = getAdjacentiles(int(buildplace[1:])-1, vert_pos)
+        print(adjacentTiles)
+        if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (adjacentTiles[0] != "" or adjacentTiles[1] != "" or adjacentTiles[2] !="" or adjacentTiles[3] !=""):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
             add_point(game_data, buildplace, vert_pos)
+        
         else:
             print("Invalid position")
 
 
+def getAdjacentiles(buildplace, vert_pos):
+    adjacentTiles = []
 
+    # Check the tile above
+    if buildplace > 0:
+    
+        adjacentTiles.append(field[vert_pos][int(buildplace -1)])
+        
+
+    #Check the tile below
+    if buildplace < len(field) - 1:
+        
+        adjacentTiles.append(field[vert_pos][int(buildplace +1)])
+    
+    #Check the tile to the left
+    if vert_pos > 0:
+        adjacentTiles.append(field[int(vert_pos -1)][buildplace])
+    
+    #Check the tile to the right
+    if vert_pos < len(field[0]) - 1:
+        adjacentTiles.append(field[int(vert_pos +1)][buildplace])
+
+    if len(adjacentTiles) < 4:
+        adjacentTiles.append("")
+
+    return adjacentTiles
+
+    
 def add_point(game_data, buildplace, vert_pos):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
-        if field[int(vert_pos)][int(buildplace[1:]) - 1] == " R":
+        if field[int(vert_pos)][int(buildplace[1:])-1] == ' R': 
             game_data["coins"]+=1
         
     elif game_data["building"] == "Residential":
