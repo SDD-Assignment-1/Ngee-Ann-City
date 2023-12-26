@@ -192,25 +192,24 @@ def choose_building(game_data):
 # save high scores
 def save_high_scores():
     # Save high scores to a text file
-    savefile = open("high_scores.txt", "w")
-
-    player_name = game_data['name']
+    #player_name = game_data['name']
     points = game_data['points']
 
-    savefile.write("Top 10 High Scores:\n")
-    savefile.write(f"Rank 1: {player_name} - Points: {points}\n")
+    with open("high_scores.txt", "w") as save:
+        save.write("Top 10 High Scores:\n")
+        save.write(f"Rank 1: User - Points: {points}\n")
 
-    savefile.close()
+    print("High scores saved successfully.")
+
     
 
 def display_high_scores():
-    # Display the top 10 high scores from high_scores.txt
-    savefile = open("high_scores.txt", "w")
     try:
-        with open(savefile, "r") as file:
-            print(savefile.read())
+        with open("high_scores.txt", "r") as file:
+            print(file.read())
     except FileNotFoundError:
-        print("Unable to load file.")
+        print("Unable to load file or no high scores available.")
+
 def game_start():
     while True:
         draw_field()
@@ -265,6 +264,4 @@ while True:
     if i == 0:
         show_main_menu()
         i +=1
-    
-
     
