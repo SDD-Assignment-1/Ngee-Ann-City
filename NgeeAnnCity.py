@@ -120,7 +120,8 @@ def place_building(game_data, buildplace,field):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            add_point(game_data, buildplace, vert_pos)
+            adjacentTiles = ['', '','','']
+            add_point(game_data, adjacentTiles)
         else:
             print("Another unit is in position")
     else:
@@ -130,7 +131,8 @@ def place_building(game_data, buildplace,field):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            add_point(game_data, buildplace, vert_pos)
+            print(adjacentTiles)
+            add_point(game_data, adjacentTiles)
         
         else:
             print("Invalid position")
@@ -141,13 +143,11 @@ def getAdjacentiles(buildplace, vert_pos):
 
     # Check the tile above
     if buildplace > 0:
-    
         adjacentTiles.append(field[vert_pos][int(buildplace -1)])
         
 
     #Check the tile below
     if buildplace < len(field) - 1:
-        
         adjacentTiles.append(field[vert_pos][int(buildplace +1)])
     
     #Check the tile to the left
@@ -158,17 +158,25 @@ def getAdjacentiles(buildplace, vert_pos):
     if vert_pos < len(field[0]) - 1:
         adjacentTiles.append(field[int(vert_pos +1)][buildplace])
 
-    if len(adjacentTiles) < 4:
+    #Check the tile to 
+    while len(adjacentTiles) < 4:
         adjacentTiles.append("")
+
 
     return adjacentTiles
 
     
-def add_point(game_data, buildplace, vert_pos):
+def add_point(game_data, adjacentTiles):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
-        if field[int(vert_pos)][int(buildplace[1:])-1] == ' R': 
-            game_data["coins"]+=1
+        
+        print(adjacentTiles)
+        count = 0
+        for i in adjacentTiles:       
+            if adjacentTiles[count] == ' R':
+                game_data["coins"]+=1
+            x+=1
+
         
     elif game_data["building"] == "Residential":
         game_data["points"]+=1
