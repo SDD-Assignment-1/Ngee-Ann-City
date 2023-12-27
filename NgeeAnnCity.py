@@ -1,8 +1,7 @@
 import pickle
 import random
- 
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
-
+validity = True
 buildings =  {'Residential' : {
             'shortform': 'R'
             },
@@ -26,6 +25,7 @@ game_data = {
             "points":0,
              "turn": 1,
              "building": ''}
+
  
 t = ["A", "B", "C", 'D', "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
  
@@ -256,26 +256,33 @@ def add_point(game_data, adjacentTiles, orthoTiles):
     #building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
 # randomise building choices
-def choose_building(game_data):
-
-    
-    choice1 = building_list[random.randint(0,4)]
-    choice2 = building_list[random.randint(0,4)]
-    # ensure the choices dont repeat.
-    while choice2 == choice1:
+def random_building():
+    if validity == True:
+        choice1 = building_list[random.randint(0,4)]
         choice2 = building_list[random.randint(0,4)]
+        # ensure the choices dont repeat.
+        while choice2 == choice1:
+            choice2 = building_list[random.randint(0,4)]
+        choices = [choice1, choice2]
+        return choices
+    
+choices = random_building()
+def choose_building(game_data, choices, validity):
+    print (validity)
+    if validity == True:
+        choices = random_building()
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'],game_data['coins']))
     print("Name:            Points: {}".format(game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choice1, choice2))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choices[0], choices[1]))
     if buildoption == '1':
-        buy_building(game_data, choice1)
+        buy_building(game_data, choices[0])
         buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
-
+        
     elif buildoption == '2':
-        buy_building(game_data, choice2)
+        buy_building(game_data, choices[1])
         buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
@@ -286,11 +293,11 @@ def choose_building(game_data):
         save_game()
         print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
         exit()  # Exit the program after saving
- 
- 
     else:
         print("Invalid option. Please enter a valid choice.")
-
+        validity = False
+        print(validity)
+    return validity
 # save high scores
 def save_high_scores():
     # Save high scores to a text file
@@ -313,9 +320,12 @@ def display_high_scores():
         print("Unable to load file or no high scores available.")
 
 def game_start():
+    validity = True
+    
     while True:
         draw_field()
-        choose_building(game_data)
+        
+        validity = choose_building(game_data,choices, validity)
 
 def show_main_menu():
     print()
@@ -356,6 +366,7 @@ def show_main_menu():
         
 
     else:
+        validity = False
         print("Invalid option. Please enter a valid choice.")
 
 
