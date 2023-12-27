@@ -257,14 +257,15 @@ def add_point(game_data, adjacentTiles, orthoTiles):
 
 # randomise building choices
 def random_building():
-    if validity == True:
         choice1 = building_list[random.randint(0,4)]
         choice2 = building_list[random.randint(0,4)]
         # ensure the choices dont repeat.
         while choice2 == choice1:
             choice2 = building_list[random.randint(0,4)]
         choices = [choice1, choice2]
+
         return choices
+    
     
 choices = random_building()
 def choose_building(game_data, choices, validity):
@@ -281,13 +282,14 @@ def choose_building(game_data, choices, validity):
         # placing the building
         place_building(game_data, buildplace, field)
         validity =  True
-        
+
     elif buildoption == '2':
         buy_building(game_data, choices[1])
         buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
         validity = True
+        
     elif buildoption == '3':
         # Save the game before stopping
         save_high_scores()
@@ -299,6 +301,8 @@ def choose_building(game_data, choices, validity):
         validity = False
         print(validity)
     return validity
+
+
 # save high scores
 def save_high_scores():
     # Save high scores to a text file
@@ -321,7 +325,7 @@ def display_high_scores():
         print("Unable to load file or no high scores available.")
 
 def game_start():
-    validity = True
+    validity = False
     
     while True:
         draw_field()
