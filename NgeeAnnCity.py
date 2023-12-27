@@ -280,13 +280,14 @@ def choose_building(game_data, choices, validity):
         buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
+        validity =  True
         
     elif buildoption == '2':
         buy_building(game_data, choices[1])
         buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
-
+        validity = True
     elif buildoption == '3':
         # Save the game before stopping
         save_high_scores()
@@ -366,7 +367,6 @@ def show_main_menu():
         
 
     else:
-        validity = False
         print("Invalid option. Please enter a valid choice.")
 
 
