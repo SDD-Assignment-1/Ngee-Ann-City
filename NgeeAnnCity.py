@@ -121,7 +121,8 @@ def place_building(game_data, buildplace,field):
             game_data["coins"] -= 1
             game_data["turn"] += 1
             orthoTiles = ['', '','','']
-            add_point(game_data, orthoTiles)
+            adjacentTiles = ['','','','']
+            add_point(game_data, adjacentTiles, orthoTiles)
         else:
             print("Another unit is in position")
     else:
@@ -133,7 +134,7 @@ def place_building(game_data, buildplace,field):
             game_data["turn"] += 1
             print(orthoTiles)
             adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
-            add_point(game_data, adjacentTiles)
+            add_point(game_data, adjacentTiles, orthoTiles)
         
         else:
             print("Invalid position")
@@ -166,6 +167,10 @@ def getOrthoTiles(buildplace, vert_pos):
 
     return orthoTiles
 
+# game over
+# def gameOver():
+    
+# get value of adjacent tiles
 def getAdjacentTiles(buildplace, vert_pos):
     adjacentTiles = []
 
@@ -202,7 +207,7 @@ def getAdjacentTiles(buildplace, vert_pos):
         adjacentTiles.append(field[vert_pos+1][int(buildplace +1)])
 
     # if len(list) less than 4, must add 
-    while len(adjacentTiles) < 4:
+    while len(adjacentTiles) < 7:
         adjacentTiles.append("")
 
     
@@ -211,7 +216,7 @@ def getAdjacentTiles(buildplace, vert_pos):
 
 
 # add points for each specific building   
-def add_point(game_data, adjacentTiles):
+def add_point(game_data, adjacentTiles, orthoTiles):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
         
@@ -223,7 +228,7 @@ def add_point(game_data, adjacentTiles):
                 game_data["coins"]+=1
             count+=1
 
-        
+    # foreach R, C, or O adjacent, add points.   
     elif game_data["building"] == "Residential":
         count = 0
         # foreach R tile adjacent, add one point.
@@ -233,6 +238,11 @@ def add_point(game_data, adjacentTiles):
             elif adjacentTiles[count] == ' O':
                 game_data["points"]+=2
             count+=1
+        count1 = 0
+        for i in orthoTiles:       
+            if orthoTiles[count1] == ' I':
+                game_data["points"]+=1
+            count1+=1
 
     elif game_data["building"] == "Commercial":
         game_data["points"]+=1
