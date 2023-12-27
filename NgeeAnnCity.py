@@ -120,31 +120,58 @@ def place_building(game_data, buildplace,field):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            adjacentTiles = ['', '','','']
-            add_point(game_data, adjacentTiles)
+            orthoTiles = ['', '','','']
+            add_point(game_data, orthoTiles)
         else:
             print("Another unit is in position")
     else:
-        adjacentTiles = getAdjacentiles(int(buildplace[1:])-1, vert_pos)
-        print(adjacentTiles)
-        if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (adjacentTiles[0] != "" or adjacentTiles[1] != "" or adjacentTiles[2] !="" or adjacentTiles[3] !=""):
+        orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
+        print(orthoTiles)
+        if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (orthoTiles[0] != "" or orthoTiles[1] != "" or orthoTiles[2] !="" or orthoTiles[3] !=""):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            print(adjacentTiles)
+            print(orthoTiles)
+            adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
             add_point(game_data, adjacentTiles)
         
         else:
             print("Invalid position")
 
 
-def getAdjacentiles(buildplace, vert_pos):
+def getOrthoTiles(buildplace, vert_pos):
+    orthoTiles = []
+
+    # Check the tile above
+    if buildplace > 0:
+        orthoTiles.append(field[vert_pos][int(buildplace -1)])
+        
+
+    #Check the tile below
+    if buildplace < len(field) - 1:
+        orthoTiles.append(field[vert_pos][int(buildplace +1)])
+    
+    #Check the tile to the left
+    if vert_pos > 0:
+        orthoTiles.append(field[int(vert_pos -1)][buildplace])
+    
+    #Check the tile to the right
+    if vert_pos < len(field[0]) - 1:
+        orthoTiles.append(field[int(vert_pos +1)][buildplace])
+
+    #Check the tile to 
+    while len(orthoTiles) < 4:
+        orthoTiles.append("")
+
+
+    return orthoTiles
+
+def getAdjacentTiles(buildplace, vert_pos):
     adjacentTiles = []
 
     # Check the tile above
     if buildplace > 0:
         adjacentTiles.append(field[vert_pos][int(buildplace -1)])
-        
 
     #Check the tile below
     if buildplace < len(field) - 1:
@@ -158,28 +185,54 @@ def getAdjacentiles(buildplace, vert_pos):
     if vert_pos < len(field[0]) - 1:
         adjacentTiles.append(field[int(vert_pos +1)][buildplace])
 
-    #Check the tile to 
+    #Check the tile to top left
+    if buildplace > 0 and vert_pos > 0:
+        adjacentTiles.append(field[vert_pos-1][int(buildplace -1)])
+        
+    #Check the tile to top-right
+    if buildplace > 0 and vert_pos < len(field[0]) - 1:
+       adjacentTiles.append(field[int(vert_pos +1)][buildplace -1])
+
+    # Check the tile to bottom-left
+    if buildplace < (len(field[0]) - 1) and vert_pos > 0:
+        adjacentTiles.append(field[vert_pos-1][int(buildplace +1)])
+
+    # Check the tile to bottom-right
+    if buildplace < (len(field[0]) - 1) and vert_pos < (len(field[0]) - 1):
+        adjacentTiles.append(field[vert_pos+1][int(buildplace +1)])
+
+    # if len(list) less than 4, must add 
     while len(adjacentTiles) < 4:
         adjacentTiles.append("")
 
-
+    
+    
     return adjacentTiles
 
-    
+
+# add points for each specific building   
 def add_point(game_data, adjacentTiles):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
         
         print(adjacentTiles)
         count = 0
+        # foreach R tile adjacent, add one coin.
         for i in adjacentTiles:       
             if adjacentTiles[count] == ' R':
                 game_data["coins"]+=1
-            x+=1
+            count+=1
 
         
     elif game_data["building"] == "Residential":
-        game_data["points"]+=1
+        count = 0
+        # foreach R tile adjacent, add one point.
+        for i in adjacentTiles:       
+            if adjacentTiles[count] == ' R' or adjacentTiles[count] == ' C':
+                game_data["points"]+=1
+            elif adjacentTiles[count] == ' O':
+                game_data["points"]+=2
+            count+=1
 
     elif game_data["building"] == "Commercial":
         game_data["points"]+=1
