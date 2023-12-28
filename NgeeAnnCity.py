@@ -275,7 +275,7 @@ def choose_building(game_data, choices, validity):
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'],game_data['coins']))
     print("Name:            Points: {}".format(game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choices[0], choices[1]))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format (choices[0], choices[1]))
     if buildoption == '1':
         buy_building(game_data, choices[0])
         buildplace = input("Please select where to place building: ")
@@ -291,11 +291,7 @@ def choose_building(game_data, choices, validity):
         validity = True
         
     elif buildoption == '3':
-        # Save the game before stopping
-        save_high_scores()
-        save_game()
-        print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
-        exit()  # Exit the program after saving
+        show_main_menu()
     else:
         print("Invalid option. Please enter a valid choice.")
         validity = False
@@ -368,10 +364,12 @@ def show_main_menu():
         save_high_scores()
         save_game()
         print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
+        raise SystemExit
         
 
     else:
         print("Invalid option. Please enter a valid choice.")
+        show_main_menu()
 
 
 
