@@ -298,6 +298,21 @@ def choose_building(game_data, choices, validity):
         print(validity)
     return validity
 
+# Function to calculate Park score based on adjacent parks
+def calculate_park_score(board, row, col):
+    adjacent_parks = count_adjacent_buildings(board, row, col, "Park")
+    return adjacent_parks * 1  # Park score is 1 point per adjacent park
+
+# Function to count adjacent buildings of a specific type
+def count_adjacent_buildings(board, row, col, building_type):
+    count = 0
+    for i in range(max(0, row - 1), min(len(board), row + 2)):
+        for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
+            if i != row or j != col:  # Exclude the current position
+                if board[i][j].endswith(building_type):
+                    count += 1
+    return count
+
 
 # save high scores
 def save_high_scores():
