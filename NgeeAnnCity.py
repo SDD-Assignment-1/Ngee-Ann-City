@@ -275,7 +275,7 @@ def choose_building(game_data, choices, validity):
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'],game_data['coins']))
     print("Name:            Points: {}".format(game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop Playing \n Your choices are: ".format (choices[0], choices[1]))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format (choices[0], choices[1]))
     if buildoption == '1':
         buy_building(game_data, choices[0])
         buildplace = input("Please select where to place building: ")
@@ -291,16 +291,27 @@ def choose_building(game_data, choices, validity):
         validity = True
 
     elif buildoption == '3':
-        # Save the game before stopping
-        save_high_scores()
-        save_game()
-        print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
-        exit()  # Exit the program after saving
+        show_main_menu()
     else:
         print("Invalid option. Please enter a valid choice.")
         validity = False
         print(validity)
     return validity
+
+# Function to calculate Park score based on adjacent parks
+def calculate_park_score(board, row, col):
+    adjacent_parks = count_adjacent_buildings(board, row, col, "Park")
+    return adjacent_parks * 1  # Park score is 1 point per adjacent park
+
+# Function to count adjacent buildings of a specific type
+def count_adjacent_buildings(board, row, col, building_type):
+    count = 0
+    for i in range(max(0, row - 1), min(len(board), row + 2)):
+        for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
+            if i != row or j != col:  # Exclude the current position
+                if board[i][j].endswith(building_type):
+                    count += 1
+    return count
 
 
 # save high scores
@@ -373,10 +384,12 @@ def show_main_menu():
         save_high_scores()
         save_game()
         print("Game saved. Thank you for playing Ngee Ann City. Goodbye!")
+        raise SystemExit
         
 
     else:
         print("Invalid option. Please enter a valid choice.")
+        show_main_menu()
 
 
 
