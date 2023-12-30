@@ -289,7 +289,7 @@ def choose_building(game_data, choices, validity):
         # placing the building
         place_building(game_data, buildplace, field)
         validity = True
-        
+
     elif buildoption == '3':
         # Save the game before stopping
         save_high_scores()
@@ -339,6 +339,11 @@ def show_main_menu():
     print("----------------")
     print("Build a prosperous city!")
     print()
+    print("  /◥████◣")
+    print("  │田│▓ ∩ │◥███◣")
+    print("  /◥◣ ◥████◣田∩田")
+    print("  │╱◥█◣║∩∩∩ ║◥███◣")
+    print("  │∩│ ▓ ║∩田│║ ▓田▓")
 
     print("Please select an option:\n\
     1. Start New Game\n\
