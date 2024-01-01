@@ -378,6 +378,8 @@ def show_main_menu():
 
     elif option == '3':
         display_high_scores()
+        show_main_menu()
+
 
     elif option == '4':
         # Save high scores and the game before exiting
