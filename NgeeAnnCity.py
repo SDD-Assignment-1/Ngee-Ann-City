@@ -112,6 +112,13 @@ def buy_building(game_data, choice):
 
     game_data["building"] = choice
 
+def is_valid_position(buildplace):
+    # Check if the input position is within the valid range
+    if len(buildplace) == 2 and buildplace[0].capitalize() in t and 1 <= int(buildplace[1:]) <= 20:
+        return True
+    else:
+        return False
+
 def place_building(game_data, buildplace,field):
     
     vert_pos = t.index(buildplace[0].capitalize())
