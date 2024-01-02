@@ -1,7 +1,7 @@
 import pickle
 import random
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
-validity = True
+validity = False
 buildings =  {'Residential' : {
             'shortform': 'R'
             },
@@ -269,7 +269,7 @@ def random_building():
     
 choices = random_building()
 def choose_building(game_data, choices, validity):
-    print (validity)
+    print(validity)
     if validity == True:
         choices = random_building()
     print()
@@ -340,7 +340,7 @@ def game_start():
     
     while True:
         draw_field()
-        
+        # this might be the problem ?????
         validity = choose_building(game_data,choices, validity)
 
 def show_main_menu():
