@@ -227,16 +227,23 @@ def getAdjacentTiles(buildplace, vert_pos):
 # add points for each specific building   
 def add_point(game_data, adjacentTiles, orthoTiles):
     if game_data["building"] == "Industry":
-        game_data["points"]+=1
-        
-       
+        numberOfPoints = 0
         count = 0
+        numberOfCoins = 0
+        game_data["points"]+=1
+        numberOfPoints += 1
+        
+        print("You Have Received {} Point(s)!".format(numberOfPoints))
+
         # foreach R tile adjacent, add one coin.
         for i in adjacentTiles:       
             if adjacentTiles[count] == ' R':
                 game_data["coins"]+=1
+                numberOfCoins +=1
+           
             count+=1
-
+        if numberOfCoins !=0:
+            print("You Have Received {} Coin(s)!".format(numberOfCoins))
     # foreach R, C, or O adjacent, add points.   
     elif game_data["building"] == "Residential":
         count = 0
