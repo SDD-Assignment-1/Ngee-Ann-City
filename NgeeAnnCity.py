@@ -21,6 +21,7 @@ buildings =  {'Residential' : {
  
 # Initialize game data
 game_data = {
+            "name":'',
             "coins":16,
             "points":0,
              "turn": 1,
@@ -295,7 +296,7 @@ def choose_building(game_data, choices, validity):
         choices = random_building()
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'], game_data['coins']))
-    print("Name:            Points: {}".format(game_data['points']))
+    print("Name: {}           Points: {}".format(game_data['name'], game_data['points']))
     buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(choices[0], choices[1]))
     if buildoption == '1':
         buy_building(game_data, choices[0])
@@ -424,6 +425,9 @@ def show_main_menu():
 i=0
 while True:
     if i == 0:
+        print("Hello!")
+        game_data["name"] = input("What's your name?")
         show_main_menu()
+       
         i +=1
     
