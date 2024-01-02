@@ -247,19 +247,25 @@ def add_point(game_data, adjacentTiles, orthoTiles):
     # foreach R, C, or O adjacent, add points.   
     elif game_data["building"] == "Residential":
         count = 0
+        numberOfPoints = 0
         # foreach R tile adjacent, add one point.
         for i in adjacentTiles:       
             if adjacentTiles[count] == ' R' or adjacentTiles[count] == ' C':
                 game_data["points"]+=1
+                numberOfPoints += 1
 
             elif adjacentTiles[count] == ' O':
-                game_data["points"]+=2
+                game_data["points"]+= 2
+                numberOfPoints +=2
             count+=1
         count1 = 0
         for i in orthoTiles:       
             if orthoTiles[count1] == ' I':
                 game_data["points"]+=1
+                numberOfPoints +=1
             count1+=1
+        if numberOfPoints !=0:
+            print("You Have Received {} Point(s)!".format(numberOfPoints))
 
     #elif game_data["building"] == "Commercial":
         #Input your code here (Nithish)
