@@ -134,17 +134,19 @@ def place_building(game_data, buildplace,field):
             print("Another unit is in position")
     else:
         orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
-        print(orthoTiles)
+     
         if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (orthoTiles[0] != "" or orthoTiles[1] != "" or orthoTiles[2] !="" or orthoTiles[3] !=""):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            print(orthoTiles)
+           
             adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
             add_point(game_data, adjacentTiles, orthoTiles)
         
         else:
-            print("Invalid position")
+                print("-------------------")
+                print("| INVALID POSITION |")
+                print("-------------------")
 
 
 def getOrthoTiles(buildplace, vert_pos):
@@ -227,7 +229,7 @@ def add_point(game_data, adjacentTiles, orthoTiles):
     if game_data["building"] == "Industry":
         game_data["points"]+=1
         
-        print(adjacentTiles)
+       
         count = 0
         # foreach R tile adjacent, add one coin.
         for i in adjacentTiles:       
@@ -242,6 +244,7 @@ def add_point(game_data, adjacentTiles, orthoTiles):
         for i in adjacentTiles:       
             if adjacentTiles[count] == ' R' or adjacentTiles[count] == ' C':
                 game_data["points"]+=1
+
             elif adjacentTiles[count] == ' O':
                 game_data["points"]+=2
             count+=1
@@ -274,7 +277,7 @@ def random_building():
     
 choices = random_building()
 def choose_building(game_data, choices, validity):
-    print(validity)
+    
     if validity == True:
         choices = random_building()
     print()
@@ -306,7 +309,6 @@ def choose_building(game_data, choices, validity):
     else:
         print("Invalid option. Please enter a valid choice.")
         validity = False
-        print(validity)
     return validity
 # Function to calculate Park score based on adjacent parks
 def calculate_park_score(board, row, col):
