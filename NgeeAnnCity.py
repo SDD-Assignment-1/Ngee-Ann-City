@@ -251,16 +251,14 @@ def add_point(game_data, adjacentTiles, orthoTiles):
                 game_data["points"]+=1
             count1+=1
 
-    elif game_data["building"] == "Commercial":
-        game_data["points"]+=1
+    #elif game_data["building"] == "Commercial":
+        #Input your code here (Nithish)
+    #elif game_data["building"] == "Park":
+        #Input your code here (Xin Yang)
 
-    elif game_data["building"] == "Park":
-        game_data["points"]+=1
-
-    elif game_data["building"] == "Road":
-        game_data["points"]+=1
+    #elif game_data["building"] == "Road":
+        #Input your code here (Shawn)
     
-    #building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 
 # randomise building choices
 def random_building():
