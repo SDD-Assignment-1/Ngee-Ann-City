@@ -276,23 +276,29 @@ def random_building():
     
 choices = random_building()
 def choose_building(game_data, choices, validity):
-    print (validity)
+    print(validity)
     if validity == True:
         choices = random_building()
     print()
-    print("Turn: {}          Coins: {}".format(game_data['turn'],game_data['coins']))
+    print("Turn: {}          Coins: {}".format(game_data['turn'], game_data['coins']))
     print("Name:            Points: {}".format(game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format (choices[0], choices[1]))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(choices[0], choices[1]))
     if buildoption == '1':
         buy_building(game_data, choices[0])
         buildplace = input("Please select where to place building: ")
+        while not is_valid_position(buildplace):
+            print("Invalid position. Please enter a valid position within the 20x20 grid.")
+            buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
-        validity =  True
+        validity = True
 
     elif buildoption == '2':
         buy_building(game_data, choices[1])
         buildplace = input("Please select where to place building: ")
+        while not is_valid_position(buildplace):
+            print("Invalid position. Please enter a valid position within the 20x20 grid.")
+            buildplace = input("Please select where to place building: ")
         # placing the building
         place_building(game_data, buildplace, field)
         validity = True
@@ -304,7 +310,6 @@ def choose_building(game_data, choices, validity):
         validity = False
         print(validity)
     return validity
-
 # Function to calculate Park score based on adjacent parks
 def calculate_park_score(board, row, col):
     adjacent_parks = count_adjacent_buildings(board, row, col, "Park")
