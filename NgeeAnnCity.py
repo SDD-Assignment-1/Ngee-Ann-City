@@ -130,7 +130,8 @@ def place_building(game_data, buildplace,field):
             game_data["turn"] += 1
             orthoTiles = ['', '','','']
             adjacentTiles = ['','','','']
-            add_point(game_data, adjacentTiles, orthoTiles)
+            connectedTiles = ['','','','']
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
         else:
             print("Another unit is in position")
     else:
@@ -142,7 +143,8 @@ def place_building(game_data, buildplace,field):
             game_data["turn"] += 1
            
             adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
-            add_point(game_data, adjacentTiles, orthoTiles)
+            connectedTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
         
         else:
                 print("-------------------")
@@ -224,9 +226,25 @@ def getAdjacentTiles(buildplace, vert_pos):
     
     return adjacentTiles
 
+def getConnectedTiles(field, vert_pos, buildplace):
+    connectedTiles = []
+
+    # Check the tile to the left
+    if vert_pos > 0 and field[vert_pos - 1][int(buildplace) - 1] != '':
+        connectedTiles.append(field[vert_pos - 1][int(buildplace) - 1])
+
+    # Check the tile to the right
+    if vert_pos < len(field) - 1 and field[vert_pos + 1][int(buildplace) - 1] != '':
+        connectedTiles.append(field[vert_pos + 1][int(buildplace) - 1])
+
+    while len(connectedTiles) < 2:
+        connectedTiles.append("")
+
+    return connectedTiles
+
 
 # add points for each specific building   
-def add_point(game_data, adjacentTiles, orthoTiles):
+def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles):
     if game_data["building"] == "Industry":
         numberOfPoints = 0
         count = 0
@@ -276,8 +294,11 @@ def add_point(game_data, adjacentTiles, orthoTiles):
             if tile in [' R', ' C', ' I']:
                 game_data["points"] += 1
 
-    #elif game_data["building"] == "Road":
-        #Input your code here (Shawn)
+    elif game_data["building"] == "Road":
+        numberOfPoints = connectedTiles.count(' *')
+        game_data["points"] += numberOfPoints
+        if numberOfPoints != 0:
+            print("You Have Received {} Point(s)!".format(numberOfPoints))
     
 
 # randomise building choices
