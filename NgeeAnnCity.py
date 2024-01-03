@@ -348,7 +348,7 @@ def save_high_scores():
 
     with open("high_scores.txt", "w") as save:
         save.write("Top 10 High Scores:\n")
-        save.write(f"Rank 1: User - Points: {points}\n")
+        save.write("Rank 1: {} - Points: {}\n".format(game_data['name'], game_data['points']))
 
     print("High scores saved successfully.")
 
