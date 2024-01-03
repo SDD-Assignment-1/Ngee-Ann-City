@@ -119,39 +119,40 @@ def is_valid_position(buildplace):
         return True
     else:
         return False
-
-def place_building(game_data, buildplace,field):
     
+def is_adjacent_to_residence(buildplace, vert_pos):
+    orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
+    return ' R' in orthoTiles
+
+def place_building(game_data, buildplace, field):
     vert_pos = t.index(buildplace[0].capitalize())
     if game_data['turn'] == 1:
         if field[int(vert_pos)][int(buildplace[1:])-1] == '':
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            orthoTiles = ['', '','','']
-            adjacentTiles = ['','','','']
-            connectedTiles = ['','','','']
-            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
+            orthoTiles = ['', '', '', '']
+            adjacentTiles = ['', '', '', '']
+            connectedTiles = ['', '', '', '']
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos)
         else:
             print("Another unit is in position")
     else:
         orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
-     
+
         if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (orthoTiles[0] != "" or orthoTiles[1] != "" or orthoTiles[2] !="" or orthoTiles[3] !=""):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-           
+
             adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
-            connectedTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
-            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
-        
+            connectedTiles = getConnectedTiles(field, vert_pos, int(buildplace[1:])-1)
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos)
         else:
-                print("-------------------")
-                print("| INVALID POSITION |")
-                print("-------------------")
-
-
+            print("-------------------")
+            print("| INVALID POSITION |")
+            print("-------------------")
+            
 def getOrthoTiles(buildplace, vert_pos):
     orthoTiles = []
 
@@ -243,51 +244,56 @@ def getConnectedTiles(field, vert_pos, buildplace):
     return connectedTiles
 
 
-# add points for each specific building   
-def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles):
+# Modify this function to generate gold for residences adjacent to commercial buildings
+def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos):
     if game_data["building"] == "Industry":
         numberOfPoints = 0
         count = 0
         numberOfCoins = 0
-        game_data["points"]+=1
+        game_data["points"] += 1
         numberOfPoints += 1
-        
+
         print("You Have Received {} Point(s)!".format(numberOfPoints))
 
         # foreach R tile adjacent, add one coin.
-        for i in adjacentTiles:       
+        for i in adjacentTiles:
             if adjacentTiles[count] == ' R':
-                game_data["coins"]+=1
-                numberOfCoins +=1
-           
-            count+=1
-        if numberOfCoins !=0:
+                game_data["coins"] += 1
+                numberOfCoins += 1
+
+            count += 1
+        if numberOfCoins != 0:
             print("You Have Received {} Coin(s)!".format(numberOfCoins))
-    # foreach R, C, or O adjacent, add points.   
+    # foreach R, C, or O adjacent, add points.
     elif game_data["building"] == "Residential":
         count = 0
         numberOfPoints = 0
         # foreach R tile adjacent, add one point.
-        for i in adjacentTiles:       
-            if adjacentTiles[count] == ' R' or adjacentTiles[count] == ' C':
-                game_data["points"]+=1
+        for i in adjacentTiles:
+            if adjacentTiles[count] == ' R' or (adjacentTiles[count] == ' C' and is_adjacent_to_residence(buildplace, vert_pos)):
+                game_data["points"] += 1
                 numberOfPoints += 1
 
             elif adjacentTiles[count] == ' O':
-                game_data["points"]+= 2
-                numberOfPoints +=2
-            count+=1
+                game_data["points"] += 2
+                numberOfPoints += 2
+            count += 1
         count1 = 0
-        for i in orthoTiles:       
+        for i in orthoTiles:
             if orthoTiles[count1] == ' I':
-                game_data["points"]+=1
-                numberOfPoints +=1
-            count1+=1
-        if numberOfPoints !=0:
+                game_data["points"] += 1
+                numberOfPoints += 1
+            count1 += 1
+        if numberOfPoints != 0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
-    #elif game_data["building"] == "Commercial":
-        #Input your code here (Nithish)
+    elif game_data["building"] == "Commercial":
+        # Generate gold for each adjacent residence
+        for i in adjacentTiles:
+            if i == ' R':
+                game_data["coins"] += 1
+                print("1 Gold generated for Residence")
+
     elif game_data["building"] == "Park":
         # Scores 1 point for each adjacent building.
         for tile in adjacentTiles:
@@ -299,7 +305,6 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles):
         game_data["points"] += numberOfPoints
         if numberOfPoints != 0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
-    
 
 # randomise building choices
 def random_building():
@@ -348,8 +353,20 @@ def choose_building(game_data, choices, validity):
         print("Invalid option. Please enter a valid choice.")
         validity = False
     return validity
+# Function to calculate Park score based on adjacent parks
+def calculate_park_score(board, row, col):
+    adjacent_parks = count_adjacent_buildings(board, row, col, "Park")
+    return adjacent_parks * 1  # Park score is 1 point per adjacent park
 
-
+# Function to count adjacent buildings of a specific type
+def count_adjacent_buildings(board, row, col, building_type):
+    count = 0
+    for i in range(max(0, row - 1), min(len(board), row + 2)):
+        for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
+            if i != row or j != col:  # Exclude the current position
+                if board[i][j].endswith(building_type):
+                    count += 1
+    return count
 
 
 # save high scores
