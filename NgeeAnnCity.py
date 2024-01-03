@@ -270,8 +270,11 @@ def add_point(game_data, adjacentTiles, orthoTiles):
 
     #elif game_data["building"] == "Commercial":
         #Input your code here (Nithish)
-    #elif game_data["building"] == "Park":
-        #Input your code here (Xin Yang)
+    elif game_data["building"] == "Park":
+        # Scores 1 point for each adjacent building.
+        for tile in adjacentTiles:
+            if tile in [' R', ' C', ' I']:
+                game_data["points"] += 1
 
     #elif game_data["building"] == "Road":
         #Input your code here (Shawn)
