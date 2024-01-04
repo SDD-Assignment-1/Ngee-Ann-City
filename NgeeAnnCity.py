@@ -1,5 +1,6 @@
 import pickle
 import random
+import re
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 validity = False
 buildings =  {'Residential' : {
@@ -382,21 +383,47 @@ def choose_building(game_data, validity):
 
     return validity
 
-# save high scores
+# Save high scores
 def save_high_scores():
-    # Save high scores to a text file
-    name = game_data['name']
-    points = game_data['points']
+    # Load existing high scores from the text file
+    high_scores = load_high_scores()
 
+    # Add the current game's score to the list
+    current_score = {'name': game_data['name'], 'points': game_data['points']}
+    high_scores.append(current_score)
+
+    # Sort the high scores in descending order based on points
+    high_scores.sort(key=lambda x: x['points'], reverse=True)
+
+    # Save the top 10 high scores to a text file
     with open("high_scores.txt", "w") as save:
         save.write("Top 10 High Scores:\n")
-        save.write("Rank 1: {} - Points: {}\n".format(game_data['name'], game_data['points']))
+        for rank, score in enumerate(high_scores[:10], start=1):
+            save.write("Rank {}: {} - Points: {}\n".format(rank, score['name'], score['points']))
 
     print("High scores saved successfully.")
 
-    
+# Function to load existing high scores from the text file
+def load_high_scores():
+    high_scores = []
 
+    try:
+        with open("high_scores.txt", "r") as file:
+            for line in file:
+                # Each line has the format "Rank X: Name - Points: Y"
+                match = re.match(r"Rank (\d+): (.+) - Points: (\d+)", line)
+                if match:
+                    rank, name, points = match.groups()
+                    high_scores.append({'name': name, 'points': int(points)})
+
+    except FileNotFoundError:
+        pass  
+
+    return high_scores
+
+# Display high scores
 def display_high_scores():
+    # Load and display high scores
     try:
         with open("high_scores.txt", "r") as file:
             print(file.read())
