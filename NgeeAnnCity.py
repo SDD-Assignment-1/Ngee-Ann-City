@@ -243,6 +243,23 @@ def getConnectedTiles(field, vert_pos, buildplace):
 
     return connectedTiles
 
+def getNextTo(buildplace, vert_pos):
+    nextTiles = []
+    
+    #Check the tile to the left
+    if vert_pos > 0:
+        nextTiles.append(field[int(vert_pos -1)][buildplace])
+    
+    #Check the tile to the right
+    if vert_pos < len(field[0]) - 1:
+        nextTiles.append(field[int(vert_pos +1)][buildplace])
+
+    #Check the tile to 
+    while len(nextTiles) < 2:
+        nextTiles.append("")
+
+
+    return nextTiles
 
 # Modify this function to generate gold for residences adjacent to commercial buildings
 def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos):
@@ -265,7 +282,11 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
         if numberOfCoins != 0:
             print("You Have Received {} Coin(s)!".format(numberOfCoins))
     # foreach R, C, or O adjacent, add points.
+   
+        
     elif game_data["building"] == "Residential":
+        nextTiles = []
+        nextTiles = getNextTo(int(buildplace[1:]), vert_pos)
         count = 0
         numberOfPoints = 0
         # foreach R tile adjacent, add one point.
@@ -279,28 +300,33 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
                 numberOfPoints += 2
             count += 1
         count1 = 0
-        for i in orthoTiles:
-            if orthoTiles[count1] == ' I':
+        for i in nextTiles:
+            if nextTiles[count1] == ' I':
                 game_data["points"] += 1
                 numberOfPoints += 1
+                if numberOfPoints > 0 or numberOfPoints < 1:
+                    break
             count1 += 1
         if numberOfPoints != 0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
     elif game_data["building"] == "Commercial":
+        numberOfCoins = 0
         # Generate gold for each adjacent residence
         for i in adjacentTiles:
             if i == ' R':
                 game_data["coins"] += 1
-                numberOfCoins+=1
-        if numberOfCoins!= 0:    
-            print("You have receieved {} Coin(s)!".format(numberOfCoins))
+                print("1 gold generated for residence")
+        
 
     elif game_data["building"] == "Park":
         # Scores 1 point for each adjacent building.
+        numberOfPoints = 0
         for tile in adjacentTiles:
             if tile in [' R', ' C', ' I']:
                 game_data["points"] += 1
+            if numberOfPoints != 0:
+                print("You Have Received {} Point(s)!".format(numberOfPoints))
 
     elif game_data["building"] == "Road":
         numberOfPoints = connectedTiles.count(' *')
@@ -309,7 +335,7 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
 # randomise building choices
-recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,5)]]
+recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,4)]]
 def random_building():
     global recentChoices
     choice1 = building_list[random.randint(0,4)]
