@@ -343,7 +343,7 @@ def count_adjacent_buildings(board, row, col, building_type):
 # save high scores
 def save_high_scores():
     # Save high scores to a text file
-    #player_name = game_data['name']
+    name = game_data['name']
     points = game_data['points']
 
     with open("high_scores.txt", "w") as save:
@@ -391,7 +391,10 @@ def show_main_menu():
     option = input("Enter your choice: ")
 
     if option == '1':
+        print("Hello!")
+        game_data['name'] = input("What's your name? ")
         game_start()
+        
 
     elif option == '2':
         try:
@@ -425,8 +428,7 @@ def show_main_menu():
 i=0
 while True:
     if i == 0:
-        print("Hello!")
-        game_data["name"] = input("What's your name?")
+        
         show_main_menu()
        
         i +=1
