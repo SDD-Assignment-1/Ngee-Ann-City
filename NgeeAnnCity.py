@@ -1,6 +1,5 @@
 import pickle
 import random
-import re
 building_list = ['Residential', 'Commercial', 'Industry', 'Park', 'Road']
 validity = False
 buildings =  {'Residential' : {
@@ -244,23 +243,6 @@ def getConnectedTiles(field, vert_pos, buildplace):
 
     return connectedTiles
 
-def getNextTo(buildplace, vert_pos):
-    nextTiles = []
-    
-    #Check the tile to the left
-    if vert_pos > 0:
-        nextTiles.append(field[int(vert_pos -1)][buildplace])
-    
-    #Check the tile to the right
-    if vert_pos < len(field[0]) - 1:
-        nextTiles.append(field[int(vert_pos +1)][buildplace])
-
-    #Check the tile to 
-    while len(nextTiles) < 2:
-        nextTiles.append("")
-
-
-    return nextTiles
 
 # Modify this function to generate gold for residences adjacent to commercial buildings
 def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos):
@@ -283,11 +265,7 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
         if numberOfCoins != 0:
             print("You Have Received {} Coin(s)!".format(numberOfCoins))
     # foreach R, C, or O adjacent, add points.
-   
-        
     elif game_data["building"] == "Residential":
-        nextTiles = []
-        nextTiles = getNextTo(int(buildplace[1:]), vert_pos)
         count = 0
         numberOfPoints = 0
         # foreach R tile adjacent, add one point.
@@ -301,33 +279,28 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
                 numberOfPoints += 2
             count += 1
         count1 = 0
-        for i in nextTiles:
-            if nextTiles[count1] == ' I':
+        for i in orthoTiles:
+            if orthoTiles[count1] == ' I':
                 game_data["points"] += 1
                 numberOfPoints += 1
-                if numberOfPoints > 0 or numberOfPoints < 1:
-                    break
             count1 += 1
         if numberOfPoints != 0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
     elif game_data["building"] == "Commercial":
-        numberOfCoins = 0
         # Generate gold for each adjacent residence
         for i in adjacentTiles:
             if i == ' R':
                 game_data["coins"] += 1
-                print("1 gold generated for residence")
-        
+                print("1 Gold generated for Residence")
+            elif i == ' C':
+                game_data["points"] += 1  # Commercial building adjacent to another commercial building generates 1 point
 
     elif game_data["building"] == "Park":
-        # Scores 1 point for each adjacent building.
-        numberOfPoints = 0
-        for tile in adjacentTiles:
-            if tile in [' R', ' C', ' I']:
-                game_data["points"] += 1
-            if numberOfPoints != 0:
-                print("You Have Received {} Point(s)!".format(numberOfPoints))
+    # Scores 1 point for each adjacent park.
+     for tile in adjacentTiles:
+        if tile == ' O':
+            game_data["points"] += 1
 
     elif game_data["building"] == "Road":
         numberOfPoints = connectedTiles.count(' *')
@@ -336,7 +309,7 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
 # randomise building choices
-recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,4)]]
+recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,5)]]
 def random_building():
     global recentChoices
     choice1 = building_list[random.randint(0,4)]
@@ -383,47 +356,21 @@ def choose_building(game_data, validity):
 
     return validity
 
-# Save high scores
+# save high scores
 def save_high_scores():
-    # Load existing high scores from the text file
-    high_scores = load_high_scores()
+    # Save high scores to a text file
+    name = game_data['name']
+    points = game_data['points']
 
-    # Add the current game's score to the list
-    current_score = {'name': game_data['name'], 'points': game_data['points']}
-    high_scores.append(current_score)
-
-    # Sort the high scores in descending order based on points
-    high_scores.sort(key=lambda x: x['points'], reverse=True)
-
-    # Save the top 10 high scores to a text file
     with open("high_scores.txt", "w") as save:
         save.write("Top 10 High Scores:\n")
-        for rank, score in enumerate(high_scores[:10], start=1):
-            save.write("Rank {}: {} - Points: {}\n".format(rank, score['name'], score['points']))
+        save.write("Rank 1: {} - Points: {}\n".format(game_data['name'], game_data['points']))
 
     print("High scores saved successfully.")
 
-# Function to load existing high scores from the text file
-def load_high_scores():
-    high_scores = []
+    
 
-    try:
-        with open("high_scores.txt", "r") as file:
-            for line in file:
-                # Each line has the format "Rank X: Name - Points: Y"
-                match = re.match(r"Rank (\d+): (.+) - Points: (\d+)", line)
-                if match:
-                    rank, name, points = match.groups()
-                    high_scores.append({'name': name, 'points': int(points)})
-
-    except FileNotFoundError:
-        pass  
-
-    return high_scores
-
-# Display high scores
 def display_high_scores():
-    # Load and display high scores
     try:
         with open("high_scores.txt", "r") as file:
             print(file.read())
