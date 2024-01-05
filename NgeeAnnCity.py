@@ -134,7 +134,7 @@ def place_building(game_data, buildplace, field):
             orthoTiles = ['', '', '', '']
             adjacentTiles = ['', '', '', '']
             connectedTiles = ['', '', '', '']
-            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos)
+            add_point(game_data, adjacentTiles, connectedTiles, buildplace, vert_pos)
         else:
             print("Another unit is in position")
     else:
@@ -262,7 +262,7 @@ def getNextTo(buildplace, vert_pos):
     return nextTiles
 
 # Modify this function to generate gold for residences adjacent to commercial buildings
-def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos):
+def add_point(game_data, adjacentTiles, connectedTiles, buildplace, vert_pos):
     if game_data["building"] == "Industry":
         numberOfPoints = 0
         count = 0
