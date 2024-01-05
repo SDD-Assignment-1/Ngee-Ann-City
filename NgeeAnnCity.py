@@ -120,10 +120,6 @@ def is_valid_position(buildplace):
         return True
     else:
         return False
-    
-def is_adjacent_to_residence(buildplace, vert_pos):
-    orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
-    return ' R' in orthoTiles
 
 def place_building(game_data, buildplace,field):  
     vert_pos = t.index(buildplace[0].capitalize())
@@ -154,7 +150,8 @@ def place_building(game_data, buildplace,field):
                 print("-------------------")
                 print("| INVALID POSITION |")
                 print("-------------------")
-            
+
+
 def getOrthoTiles(buildplace, vert_pos):
     orthoTiles = []
 
@@ -246,91 +243,87 @@ def getConnectedTiles(field, vert_pos, buildplace):
     return connectedTiles
 
 
-# Modify this function to generate gold for residences adjacent to commercial buildings
-def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos):
+# add points for each specific building   
+def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles):
     if game_data["building"] == "Industry":
         numberOfPoints = 0
         count = 0
         numberOfCoins = 0
-        game_data["points"] += 1
+        game_data["points"]+=1
         numberOfPoints += 1
-
+        
         print("You Have Received {} Point(s)!".format(numberOfPoints))
 
         # foreach R tile adjacent, add one coin.
-        for i in adjacentTiles:
+        for i in adjacentTiles:       
             if adjacentTiles[count] == ' R':
-                game_data["coins"] += 1
-                numberOfCoins += 1
-
-            count += 1
-        if numberOfCoins != 0:
+                game_data["coins"]+=1
+                numberOfCoins +=1
+           
+            count+=1
+        if numberOfCoins !=0:
             print("You Have Received {} Coin(s)!".format(numberOfCoins))
-    # foreach R, C, or O adjacent, add points.
+    # foreach R, C, or O adjacent, add points.   
     elif game_data["building"] == "Residential":
         count = 0
         numberOfPoints = 0
         # foreach R tile adjacent, add one point.
-        for i in adjacentTiles:
-            if adjacentTiles[count] == ' R' or (adjacentTiles[count] == ' C' and is_adjacent_to_residence(buildplace, vert_pos)):
-                game_data["points"] += 1
+        for i in adjacentTiles:       
+            if adjacentTiles[count] == ' R' or adjacentTiles[count] == ' C':
+                game_data["points"]+=1
                 numberOfPoints += 1
 
             elif adjacentTiles[count] == ' O':
-                game_data["points"] += 2
-                numberOfPoints += 2
-            count += 1
+                game_data["points"]+= 2
+                numberOfPoints +=2
+            count+=1
         count1 = 0
-        for i in orthoTiles:
+        for i in orthoTiles:       
             if orthoTiles[count1] == ' I':
-                game_data["points"] += 1
-                numberOfPoints += 1
-            count1 += 1
-        if numberOfPoints != 0:
+                game_data["points"]+=1
+                numberOfPoints +=1
+            count1+=1
+        if numberOfPoints !=0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
-    elif game_data["building"] == "Commercial":
-        # Generate gold for each adjacent residence
-        for i in adjacentTiles:
-            if i == ' R':
-                game_data["coins"] += 1
-                print("1 Gold generated for Residence")
-            elif i == ' C':
-                game_data["points"] += 1  # Commercial building adjacent to another commercial building generates 1 point
-
+    #elif game_data["building"] == "Commercial":
+        #Input your code here (Nithish)
     elif game_data["building"] == "Park":
-    # Scores 1 point for each adjacent park.
-     for tile in adjacentTiles:
-        if tile == ' O':
-            game_data["points"] += 1
+        # Scores 1 point for each adjacent building.
+        for tile in adjacentTiles:
+            if tile in [' R', ' C', ' I']:
+                game_data["points"] += 1
 
     elif game_data["building"] == "Road":
         numberOfPoints = connectedTiles.count(' *')
         game_data["points"] += numberOfPoints
         if numberOfPoints != 0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
+    
 
 # randomise building choices
-recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,5)]]
 def random_building():
-    global recentChoices
-    choice1 = building_list[random.randint(0,4)]
-    choice2 = building_list[random.randint(0,4)]
-    # ensure the choices dont repeat.
-    while choice2 == choice1:
+        choice1 = building_list[random.randint(0,4)]
         choice2 = building_list[random.randint(0,4)]
-    recentChoices = [choice1, choice2]
+        # ensure the choices dont repeat.
+        while choice2 == choice1:
+            choice2 = building_list[random.randint(0,4)]
+        choices = [choice1, choice2]
+
+        return choices
     
-   
-def choose_building(game_data, validity):
+    
+choices = random_building()
+def choose_building(game_data, choices, validity):
+    
     if validity == True:
-        random_building()
+        choices = random_building()
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'], game_data['coins']))
     print("Name: {}           Points: {}".format(game_data['name'], game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(recentChoices[0], recentChoices[1]))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(choices[0], choices[1]))
     if buildoption == '1':
-        buy_building(game_data, recentChoices[0])
+        buy_building(game_data, choices[0])
         buildplace = input("Please select where to place building: ")
         while not is_valid_position(buildplace):
             print("Invalid position. Please enter a valid position within the 20x20 grid.")
@@ -340,7 +333,7 @@ def choose_building(game_data, validity):
         validity = True
 
     elif buildoption == '2':
-        buy_building(game_data, recentChoices[1])
+        buy_building(game_data, choices[1])
         buildplace = input("Please select where to place building: ")
         while not is_valid_position(buildplace):
             print("Invalid position. Please enter a valid position within the 20x20 grid.")
@@ -351,16 +344,29 @@ def choose_building(game_data, validity):
 
     elif buildoption == '3':
         show_main_menu()
-
     else:
         print("Invalid option. Please enter a valid choice.")
         validity = False
-
     return validity
+# Function to calculate Park score based on adjacent parks
+def calculate_park_score(board, row, col):
+    adjacent_parks = count_adjacent_buildings(board, row, col, "Park")
+    return adjacent_parks * 1  # Park score is 1 point per adjacent park
+
+# Function to count adjacent buildings of a specific type
+def count_adjacent_buildings(board, row, col, building_type):
+    count = 0
+    for i in range(max(0, row - 1), min(len(board), row + 2)):
+        for j in range(max(0, col - 1), min(len(board[0]), col + 2)):
+            if i != row or j != col:  # Exclude the current position
+                if board[i][j].endswith(building_type):
+                    count += 1
+    return count
+
 
 # Save high scores
 def save_high_scores():
-    # Load existing high scores from the high scores text file
+    # Load existing high scores from a text file
     high_scores = load_high_scores()
 
     # Add the current game's score to the list
@@ -378,7 +384,7 @@ def save_high_scores():
 
     print("High scores saved successfully.")
 
-# Function to load existing high scores from the high scores text file
+# Function to load existing high scores from a text file
 def load_high_scores():
     high_scores = []
 
@@ -411,16 +417,7 @@ def game_start():
     while True:
         draw_field()
         # this might be the problem ?????
-        if game_data["coins"] !=0:
-            validity = choose_building(game_data, validity)
-        else:
-            print("--------------------------------------------")
-            print("|   You Have Run Out Of Coins, Game Over!  |")
-            print("--------------------------------------------")
-            print("Turn: {}          ".format(game_data['turn']))
-            print("Name: {}           Final score: {}".format(game_data['name'], game_data['points']))
-            print()
-            exit()
+        validity = choose_building(game_data,choices, validity)
 
 def show_main_menu():
     print()
@@ -444,10 +441,7 @@ def show_main_menu():
     option = input("Enter your choice: ")
 
     if option == '1':
-        print("Hello!")
-        game_data['name'] = input("What's your name? ")
         game_start()
-        
 
     elif option == '2':
         try:
@@ -481,7 +475,8 @@ def show_main_menu():
 i=0
 while True:
     if i == 0:
-        
+        print("Hello!")
+        game_data["name"] = input("What's your name?")
         show_main_menu()
        
         i +=1
