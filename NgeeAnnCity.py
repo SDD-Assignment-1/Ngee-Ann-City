@@ -394,15 +394,17 @@ def save_high_scores():
 # Function to load existing high scores from a text file
 def load_high_scores():
     high_scores = []
+    highcount = 0
 
     try:
         with open("high_scores.txt", "r") as file:
             for line in file:
                 # Assuming each line has the format "Rank X: Name - Points: Y"
                 match = re.match(r"Rank (\d+): (.+) - Points: (\d+)", line)
-                if match:
+                if match and highcount <11:
                     rank, name, points = match.groups()
                     high_scores.append({'name': name, 'points': int(points)})
+                    highcount += 1
 
     except FileNotFoundError:
         pass  
