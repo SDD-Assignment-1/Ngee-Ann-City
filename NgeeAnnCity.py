@@ -286,13 +286,20 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles):
         if numberOfPoints !=0:
             print("You Have Received {} Point(s)!".format(numberOfPoints))
 
-    #elif game_data["building"] == "Commercial":
-        #Input your code here (Nithish)
+    elif game_data["building"] == "Commercial":
+        # Generate gold for each adjacent residence
+        for i in adjacentTiles:
+            if i == ' R':
+                game_data["coins"] += 1
+                print("1 Gold generated for Residence")
+            elif i == ' C':
+                game_data["points"] += 1  # Commercial building adjacent to another commercial building generates 1 point
+
     elif game_data["building"] == "Park":
-        # Scores 1 point for each adjacent building.
-        for tile in adjacentTiles:
-            if tile in [' R', ' C', ' I']:
-                game_data["points"] += 1
+    # Scores 1 point for each adjacent park.
+     for tile in adjacentTiles:
+        if tile == ' O':
+            game_data["points"] += 1
 
     elif game_data["building"] == "Road":
         numberOfPoints = connectedTiles.count(' *')
@@ -480,4 +487,3 @@ while True:
         show_main_menu()
        
         i +=1
-    
