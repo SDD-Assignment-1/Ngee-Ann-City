@@ -325,29 +325,25 @@ def add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, 
             print("You Have Received {} Point(s)!".format(numberOfPoints))
     
 
-# randomise building choices
+recentChoices = [building_list[random.randint(0,2)], building_list[random.randint(2,5)]]
 def random_building():
-        choice1 = building_list[random.randint(0,4)]
+    global recentChoices
+    choice1 = building_list[random.randint(0,4)]
+    choice2 = building_list[random.randint(0,4)]
+    # ensure the choices dont repeat.
+    while choice2 == choice1:
         choice2 = building_list[random.randint(0,4)]
-        # ensure the choices dont repeat.
-        while choice2 == choice1:
-            choice2 = building_list[random.randint(0,4)]
-        choices = [choice1, choice2]
+    recentChoices = [choice1, choice2]
 
-        return choices
-    
-    
-choices = random_building()
-def choose_building(game_data, choices, validity):
-    
+def choose_building(game_data, validity):
     if validity == True:
-        choices = random_building()
+        random_building()
     print()
     print("Turn: {}          Coins: {}".format(game_data['turn'], game_data['coins']))
     print("Name: {}           Points: {}".format(game_data['name'], game_data['points']))
-    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(choices[0], choices[1]))
+    buildoption = input("You have been given 2 buildings! Please select a building to place.\n 1. {} \n 2. {}\n ------ OR ------ \n 3. Stop playing \n Your choices are: ".format(recentChoices[0], recentChoices[1]))
     if buildoption == '1':
-        buy_building(game_data, choices[0])
+        buy_building(game_data, recentChoices[0])
         buildplace = input("Please select where to place building: ")
         while not is_valid_position(buildplace):
             print("Invalid position. Please enter a valid position within the 20x20 grid.")
@@ -357,7 +353,7 @@ def choose_building(game_data, choices, validity):
         validity = True
 
     elif buildoption == '2':
-        buy_building(game_data, choices[1])
+        buy_building(game_data, recentChoices[1])
         buildplace = input("Please select where to place building: ")
         while not is_valid_position(buildplace):
             print("Invalid position. Please enter a valid position within the 20x20 grid.")
@@ -368,11 +364,12 @@ def choose_building(game_data, choices, validity):
 
     elif buildoption == '3':
         show_main_menu()
+
     else:
         print("Invalid option. Please enter a valid choice.")
         validity = False
-    return validity
 
+    return validity
 
 # Save high scores
 def save_high_scores():
@@ -429,7 +426,7 @@ def game_start():
     while True:
         draw_field()
         # this might be the problem ?????
-        validity = choose_building(game_data,choices, validity)
+        validity = choose_building(game_data, validity)
 
 def show_main_menu():
     print()
