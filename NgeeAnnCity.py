@@ -125,34 +125,35 @@ def is_adjacent_to_residence(buildplace, vert_pos):
     orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
     return ' R' in orthoTiles
 
-def place_building(game_data, buildplace, field):
+def place_building(game_data, buildplace,field):  
     vert_pos = t.index(buildplace[0].capitalize())
     if game_data['turn'] == 1:
         if field[int(vert_pos)][int(buildplace[1:])-1] == '':
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-            orthoTiles = ['', '', '', '']
-            adjacentTiles = ['', '', '', '']
-            connectedTiles = ['', '', '', '']
-            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos)
+            orthoTiles = ['', '','','']
+            adjacentTiles = ['','','','']
+            connectedTiles = ['','','','']
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
         else:
             print("Another unit is in position")
     else:
         orthoTiles = getOrthoTiles(int(buildplace[1:])-1, vert_pos)
-
+     
         if field[int(vert_pos)][int(buildplace[1:])-1] == '' and (orthoTiles[0] != "" or orthoTiles[1] != "" or orthoTiles[2] !="" or orthoTiles[3] !=""):
             field[int(vert_pos)][int(buildplace[1:]) - 1] = " " + buildings[game_data["building"]]["shortform"]
             game_data["coins"] -= 1
             game_data["turn"] += 1
-
+           
             adjacentTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
-            connectedTiles = getConnectedTiles(field, vert_pos, int(buildplace[1:])-1)
-            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles, buildplace, vert_pos)
+            connectedTiles = getAdjacentTiles(int(buildplace[1:])-1, vert_pos)
+            add_point(game_data, adjacentTiles, orthoTiles, connectedTiles)
+        
         else:
-            print("-------------------")
-            print("| INVALID POSITION |")
-            print("-------------------")
+                print("-------------------")
+                print("| INVALID POSITION |")
+                print("-------------------")
             
 def getOrthoTiles(buildplace, vert_pos):
     orthoTiles = []
